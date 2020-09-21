@@ -1,0 +1,16 @@
+version: '3'
+services:
+  waf:
+    image: cdue/nginx-subs-filter
+    ports:
+      - "60004:80"
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
+    command: nginx -g "daemon off; load_module /etc/nginx/modules/ngx_http_subs_filter_module.so;"
+    depends_on:
+      - php
+  php:
+    image: php:7-fpm
+    volumes:
+      - ./index.php:/code/index.php:ro
+      - ./flag:/tmp/flag:ro
